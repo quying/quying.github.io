@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  
+  <meta name="keywords" content="hash,加密," />
+
+
+<meta name="description" content="什么样的加密算法才是安全的？  破译算法的代价大于加密数据的价值 破译算法所需要的时间比加密数据保密的时间更长 用单密钥加密的数据量比破译算法需要的数据量少得多  数据传输需要考虑？  安全性——加密算法 完整性——数据不被篡改——hash 真实性——数据确实来自于发送方——数字签名 不可否认性——发送方不可否认他发送过数据——数字证书  对称加密加密解密使用相同密钥典型算法：AES、DES、3D">
+<meta name="keywords" content="hash,加密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加密算法与hash">
+<meta property="og:url" content="http://yoursite.com/2018/01/13/encryption/index.html">
+<meta property="og:site_name" content="Boring">
+<meta property="og:description" content="什么样的加密算法才是安全的？  破译算法的代价大于加密数据的价值 破译算法所需要的时间比加密数据保密的时间更长 用单密钥加密的数据量比破译算法需要的数据量少得多  数据传输需要考虑？  安全性——加密算法 完整性——数据不被篡改——hash 真实性——数据确实来自于发送方——数字签名 不可否认性——发送方不可否认他发送过数据——数字证书  对称加密加密解密使用相同密钥典型算法：AES、DES、3D">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/des_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/des_2.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/des_3.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/des_4.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/des_5.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/aes.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/compress.jpeg">
+<meta property="og:image" content="http://yoursite.com/2018/01/13/encryption/hash.png">
+<meta property="og:updated_time" content="2018-01-18T11:38:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="加密算法与hash">
+<meta name="twitter:description" content="什么样的加密算法才是安全的？  破译算法的代价大于加密数据的价值 破译算法所需要的时间比加密数据保密的时间更长 用单密钥加密的数据量比破译算法需要的数据量少得多  数据传输需要考虑？  安全性——加密算法 完整性——数据不被篡改——hash 真实性——数据确实来自于发送方——数字签名 不可否认性——发送方不可否认他发送过数据——数字证书  对称加密加密解密使用相同密钥典型算法：AES、DES、3D">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/13/encryption/des_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/13/encryption/"/>
+
+
+  <title>加密算法与hash | Boring</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Boring</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/13/encryption/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ying">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Boring">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">加密算法与hash</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T17:46:42+08:00">2018-01-13</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>什么样的加密算法才是安全的？</p>
+<ul>
+<li>破译算法的代价大于加密数据的价值</li>
+<li>破译算法所需要的时间比加密数据保密的时间更长</li>
+<li>用单密钥加密的数据量比破译算法需要的数据量少得多</li>
+</ul>
+<p>数据传输需要考虑？</p>
+<ul>
+<li>安全性——加密算法</li>
+<li>完整性——数据不被篡改——hash</li>
+<li>真实性——数据确实来自于发送方——数字签名</li>
+<li>不可否认性——发送方不可否认他发送过数据——数字证书</li>
+</ul>
+<h1 id="对称加密"><a href="#对称加密" class="headerlink" title="对称加密"></a>对称加密</h1><p>加密解密使用相同密钥<br>典型算法：AES、DES、3DES、Blowfish</p>
+<p>以上算法都属于分组加密算法</p>
+<h2 id="分组加密"><a href="#分组加密" class="headerlink" title="分组加密"></a>分组加密</h2><p>是一种对称密钥算法<br>将（较长的）明文拆分成固定长度的块，然后对拆分的块按照特定的模式进行加密。<br>设计原则：扩散（diffusion）和扰乱（confusion）是影响密码安全的主要因素。<br>扩散的目的是让明文中的单个数字影响密文中的多个数字，从而使明文的统计特征在密文中消失，相当于明文的统计结构被扩散。<br>扰乱是指让密钥与密文的统计信息之间的关系变得复杂，从而增加通过统计方法进行攻击的难度。扰乱可以通过各种代换算法实现。</p>
+<p>设计安全的分组加密算法，需要考虑对现有密码分析方法的抵抗，如差分分析、线性分析等，还需要考虑密码安全强度的稳定性。此外，用软件实现的分组加密要保证每个组的长度适合软件编程（如8、16、32……），尽量避免位置换操作，以及使用加法、乘法、移位等处理器提供的标准指令；从硬件实现的角度，加密和解密要在同一个器件上都可以实现，即加密解密硬件实现的相似性。</p>
+<p><a href="https://zh.wikipedia.org/wiki/分组密码工作模式" target="_blank" rel="external">分组加密工作模式点这里</a></p>
+<h2 id="DES-Data-Encryption-Standard"><a href="#DES-Data-Encryption-Standard" class="headerlink" title="DES(Data Encryption Standard)"></a>DES(Data Encryption Standard)</h2><p><a href="https://zh.wikipedia.org/wiki/資料加密標準" target="_blank" rel="external">wiki</a></p>
+<p>是一种对称密钥加密块密码算法，1976年被美国联邦政府的国家标准局确定为联邦资料处理标准（FIPS）。DES现在已经不是一种安全的加密方法，主要因为它使用的56位密钥过短。</p>
+<p>分组：64 bits    密钥：64 bits</p>
+<p><img src="des_1.png" alt=""> <center>des加密</center><br><img src="des_2.png" alt=""><center>des解密</center><br><img src="des_3.png" alt=""><center>des加密算法原理</center></p>
+<p>Fiestel函数（每轮运算）步骤：</p>
+<ol>
+<li>扩张：将32位的半块扩展到48位</li>
+<li>密钥混合：扩张结果和生成的48位密钥异或(每轮密钥由主密钥通过一定规则位移生成）</li>
+<li>S盒：48-&gt;8个6位盒，S盒通过查找表进行非线性变换，输出8个4位</li>
+<li>P置换：利用固定位置表置换，生成32位<br>P盒置换的结果与最初的64位分组另一半L0异或，然后左、右半部分交换，接着开始另一轮。</li>
+</ol>
+<h2 id="3DES"><a href="#3DES" class="headerlink" title="3DES"></a>3DES</h2><p>3DES通过增加DES的密钥长度来避免暴力破解，而不是设计一种全新的块密码算法<br><img src="des_4.png" alt=""><center>3des加密</center><br><img src="des_5.png" alt=""><center>3des解密</center></p>
+<h2 id="AES-Advanced-Encryption-Standard"><a href="#AES-Advanced-Encryption-Standard" class="headerlink" title="AES(Advanced Encryption Standard)"></a>AES(Advanced Encryption Standard)</h2><p><a href="https://zh.wikipedia.org/wiki/高级加密标准" target="_blank" rel="external">wiki</a></p>
+<p>现行的对称加密标准。AES在软件及硬件上都能快速地加解密，相对来说较易于实现，且只需要很少的内存。</p>
+<p>分组：128 bits    密钥：128、192、256 bits<br><img src="aes.png" alt=""> </p>
+<center>aes加密算法原理</center>
+
+<p>算法原理参考wiki</p>
+<h1 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h1><p>加密需要一对密钥，公钥和私钥。一个用来加密的时候另一个用来解密。<br>非对称加密算法通常基于数学求解问题，其安全性基于求解难度。<br>虽然两个密钥在数学上相关，但如果知道了其中一个，并不能凭此计算出另外一个；因此其中一个可以公开，称为公钥，任意向外发布；不公开的密钥为私钥，必须由用户自行严格秘密保管。</p>
+<p>典型算法：RSA、DSA、ECC<br>无法通过公钥算出私钥，或者说以现在的计算能力需要几亿万年才能算出来</p>
+<h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2><p><a href="https://zh.wikipedia.org/wiki/RSA加密演算法" target="_blank" rel="external">wiki</a></p>
+<h3 id="公钥和私钥的产生"><a href="#公钥和私钥的产生" class="headerlink" title="公钥和私钥的产生"></a>公钥和私钥的产生</h3><p>假设Alice想要通过一个不可靠的媒体接收Bob的一条私人消息。她可以用以下的方式来产生一个公钥和一个私钥：</p>
+<ol>
+<li>随意选择两个大的质数p和q，p不等于q，计算N=pq。</li>
+<li>根据欧拉函数，求得r = φ(N) = (p-1)(q-1)</li>
+<li>选择一个小于r的整数e，使e与r互质。</li>
+<li>求得e关于r的模反元素，命名为d。(即ed ≡ 1 (mod r)（模反元素存在，当且仅当e与r互质）</li>
+<li>将p和q的记录销毁。<br>$$公钥：(N,e) $$ $$私钥：(N,d)$$<br>Alice将她的公钥(N,e)传给Bob，而将她的私钥(N,d)藏起来。</li>
+</ol>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>有无可能通过N和e，推导出d？<br>（1）ed≡1 (mod φ(N))。只有知道e和φ(N)，才能算出d。<br>（2）φ(N)=(p-1)(q-1)。只有知道p和q，才能算出φ(N)。<br>（3）N=pq。只有将N因数分解，才能算出p和q。</p>
+<p>对极大整数做因数分解的难度决定了RSA算法的可靠性。假如有人找到一种快速因数分解的算法的话，那么用RSA加密的信息的可靠性就肯定会极度下降。但找到这样的算法的可能性是非常小的。目前只有短的RSA钥匙才可能被强力方式解破。</p>
+<p>目前被破解的最长RSA密钥是768个二进制位。也就是说，长度超过768位的密钥，还无法破解（至少没人公开宣布）。因此可以认为，1024位的RSA密钥基本安全，2048位的密钥极其安全。</p>
+<h3 id="加密消息"><a href="#加密消息" class="headerlink" title="加密消息"></a>加密消息</h3><p>假设Bob想给Alice送一个消息m。他使用起先与Alice约好的格式将m转换为一个小于N，且与N互质的整数n，比如他可以将每一个字转换为这个字的Unicode码，然后将这些数字连在一起组成一个数字。假如他的信息非常长的话，他可以将这个信息分为几段，然后将每一段转换为n。用下面这个公式他可以将n加密为c：<br>$$ c ≡ n^e(mod N) $$</p>
+<h3 id="解密消息"><a href="#解密消息" class="headerlink" title="解密消息"></a>解密消息</h3><p>Alice得到Bob的消息c后就可以利用她的密钥d来解码。她可以用以下这个公式来将c转换为n：<br>$$ m ≡ c^d(mod N) $$</p>
+<blockquote>
+<p>公钥和私钥可以替换吗?<br>数学计算上是可以互换的。但实践中选取的公钥较小（openSSL默认65537，便于计算），私钥要长</p>
+</blockquote>
+<h2 id="DSA（Digital-Signature-Algorithm）"><a href="#DSA（Digital-Signature-Algorithm）" class="headerlink" title="DSA（Digital Signature Algorithm）"></a>DSA（Digital Signature Algorithm）</h2><p>DSA 的安全性是基于整数有限域离散对数难题<br>它不能用作加密和解密，也不能进行密钥交换，只用于签名，它比RSA要快很多。</p>
+<h2 id="ECC（Elliptic-curve-cryptography）"><a href="#ECC（Elliptic-curve-cryptography）" class="headerlink" title="ECC（Elliptic curve cryptography）"></a>ECC（Elliptic curve cryptography）</h2><p><a href="ECC（Elliptic curve cryptography">wiki</a><br>安全性基于椭圆曲线离散对数问题的困难性<br>主要优势是在某些情况下它比其他的方法使用更小的密钥——比如RSA加密算法——提供相当的或更高等级的安全。<br>安全性高，处理速度快。</p>
+<h1 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h1><p>散列函数把消息或数据压缩成摘要，使得数据量变小，将数据的格式固定下来。该函数将数据打乱混合，重新创建一个叫做散列值的指纹。</p>
+<p>应用：加密，数据完整性，散列表，错误校正<br>碰撞（Collision）: 不同消息得到相同的散列值。<br>理论上消息是无限的，但可能的散列值是有限的。不同的消息有可能产生相同的散列值。安全散列函数应该使任意两个消息略微有差别，它们的散列值也会有很大区别。即抗冲突性。</p>
+<h2 id="安全散列函数"><a href="#安全散列函数" class="headerlink" title="安全散列函数"></a>安全散列函数</h2><p>在密码学中，hash算法的作用主要是用于消息摘要和签名，换句话说，它主要用于对整个消息的完整性进行校验。安全散列函数都是不可逆的。</p>
+<p><img src="compress.jpeg" width="400px"></p>
+<center>压缩函数</center><br><img src="hash.png" alt=""><center>安全散列函数的一般结构</center>
+
+<p>安全散列函数接受一个不定长输入m，将其分为固定长度的若干分组，设为t组。长度不足需要填充。<br>重复使用一个压缩函数f。f有两个输入，一个是上一阶段f的输出，另一个是消息的一个r分组，通常r&gt;n;f产生一个n位的输出。算法开始时，使用一个初始化变量IV，最终输出值通过一个输出变换函数g得到消息的散列值。</p>
+<p>典型算法：MD5、SHA1、HMAC  </p>
+<h3 id="MD5"><a href="#MD5" class="headerlink" title="MD5"></a>MD5</h3><p>1996年后被证实存在弱点，可以被加以破解，无法防止碰撞（collision），因此不适用于安全性认证。目前，MD5计算广泛应用于错误检查。</p>
+<p>分组长度： 512bits<br>输出：128bits</p>
+<h3 id="SHA（Secure-Hash-Algorithm）"><a href="#SHA（Secure-Hash-Algorithm）" class="headerlink" title="SHA（Secure Hash Algorithm）"></a>SHA（Secure Hash Algorithm）</h3><p>sha-1    sha-2(-224    -256    -384    -512)<br>分组长度： 512bits<br>输出：sha-1：160bits </p>
+<p>sha-1和MD5相比，输出更长，抗攻击能力更强，但计算也慢。且sha-1已经有有效的攻击方法，推荐使用sha-2替代。</p>
+<h3 id="MAC-Message-authentication-code"><a href="#MAC-Message-authentication-code" class="headerlink" title="MAC(Message authentication code)"></a>MAC(Message authentication code)</h3><p>消息认证码<br>在发送数据之前，发送方首先使用通信双方协商好的散列函数计算其摘要值。在双方共享的会话密钥作用下，由摘要值获得消息验证码。之后，它和数据一起被发送。接收方收到报文后，首先利用会话密钥还原摘要值，同时利用散列函数在本地计算所收到数据的摘要值，并将这两个数据进行比对。若两者相等，则报文通过认证。</p>
+<p>计算方式：</p>
+<ol>
+<li>使用对称加密算法对摘要加密</li>
+<li>使用专门的MAC算法，HMAC，基于MD5或者SHA-1，在计算散列值时将密钥和数据同时作为输入，并采用了二次散列迭代的方式</li>
+</ol>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>网站登陆输入密码如果用明文保存，则很容易被黑客窃取。使用hash算法生成一个密码签名，后台保存的也是这个签名值。由于hash算法不可逆，所以即便得到签名，也不能得到真实密码，就连网站的开发人员也不能得到用户密码明文。每次用户登陆时，后台计算hash值，与库中的原hash值对比就可以验证。</p>
+<p>单纯使用MD5并不能保证账户安全。攻击者使用暴力攻击和字典攻击就用可能计算出密码。例如密文“123456”的MD5值是“e10adc3949ba59abbe56e057f20f883e”，当攻击者知道算法是md5，且数据库里存储的密码值为“e10adc3949ba59abbe56e057f20f883e”时，理论上可以猜到，用户的明文密码就是“123456”。</p>
+<p>加盐(Adding Salt)是在密码中加入一段随机字符串再进行哈希加密，这个被加的字符串称之为盐值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hash(&quot;hello&quot;)                    = 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824</div><div class="line">hash(&quot;hello&quot; + &quot;QxLUF1bgIAdeQX&quot;) = 9e209040c863f84a31e719795b2577523954739fe5ed3b58a75cff2127075ed1</div><div class="line">hash(&quot;hello&quot; + &quot;bv5PehSMfV11Cd&quot;) = d1d3ec2e6f20fd420d50e2642992841d8338a314b8ea157c9e18477aaef226ab</div></pre></td></tr></table></figure></p>
+<p>通过随机化哈希，避免最初级的暴力攻击。攻击者不知道盐值，破解难度就会加大。<br>实际使用中需要避免［短盐值］和［盐值复用］，使用随机盐值增加安全性。<br>盐值需要存储，用来验证。</p>
+<h1 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h1><p>多人通信需要用多对密钥。<br>非对称密钥是单向使用的，即A给B发消息需要使用B的公钥加密，B给A发消息需使用A的公钥加密。</p>
+<p>对称加密速度要快于非对称加密。<br>非对称加密通常用于加密短文本，对称加密通常用于加密长文本。<br>两者可以结合起来使用，比如HTTPS协议，可以在握手阶段，通过RSA来交换生成对称秘钥。在之后的通讯阶段，可以使用对称加密算法对数据进行加密，秘钥则是握手阶段生成的。</p>
+<p>对称秘钥交换不一定通过RSA，还可以通过类似DH(Diffie–Hellman key exchange)来完成</p>
+<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>签署者使用他的私钥（应用一个签名算法）来签署文档。验证者使用签署者的公钥（公开的）验证文档。当一个文档被签署时，任何人都能验证它，因为任何人都能访问签署者的公钥。由于私钥的保密性，签名是无法伪造的。</p>
+<blockquote>
+<p>公钥负责加密，私钥负责解密<br>私钥负责签名，公钥负责验证</p>
+</blockquote>
+<h2 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h2><p>A与B使用数字签名通信，数字签名中的公钥可能被C截获，替换为自己的公钥，此时B不能确定发信方是否就是A，另一方面，A也可以不承认自己给B发送过消息，互联网中谁都不能信任对方，这时就需要第三方介入。</p>
+<p>CA（Certificate Authority）认证机构<br>发信方将自己的公钥注册到CA，由CA提供数字签名生成公钥证书（Public-Key Certificate）PKC，简称证书。证书中有CA的签名，接收方可以通过验签来验证公钥的合法性。<br>如果某用户信任了该CA，就获取了该CA的公钥（实际上信任CA的其中一个作用就是获取CA公钥），使用该公钥解密数字证书就可以验证申请者的信息以及申请者公钥的可靠性（申请者的公钥只被CA的私钥加密，解密该私钥后只是需要验证可靠性）。</p>
+<p>CRL（证书吊销列表）<br>每次接收到需要解密的数字证书时，还要去该颁发机构指定网站的证书吊销列表（CRL）中查询该证书是否被吊销，对于吊销后的证书应该不予以信任，这是信任CA的第二个作用。导致证书被吊销的可能性如申请者的私钥被黑客获取，申请者申请吊销等。</p>
+<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><p>SSL/TLS(Transport Layer Security)<br>SSL包含记录层（Record Layer）和传输层，记录层协议确定传输层数据的封装格式。传输层安全协议使用X.509认证，之后利用非对称加密演算来对通信方做身份认证，之后交换对称密钥作为会谈密钥（Session key）。这个会谈密钥是用来将通信两方交换的数据做加密，保证两个应用间通信的保密性和可靠性，使客户与服务器应用之间的通信不被攻击者窃听。</p>
+<p>SSL位于应用层和TCP/IP层之间。TLS位于传输层</p>
+<p>客户端和主机进行 HTTP 通信之前，先建立 SSL/TLS 连接，加密通信的数据。</p>
+<ol>
+<li>client给出协议版本号、一个客户端生成的随机数（Client random），以及客户端支持的加密方法。</li>
+<li>Server确认双方使用的加密方法，并给出数字证书、以及一个服务器生成的随机数（Server random）。</li>
+<li>Client确认数字证书有效，然后生成一个新的随机数（Premaster secret），并使用数字证书中的公钥，加密这个随机数，发给Server。</li>
+<li>Server使用自己的私钥，获取Client发来的随机数（即Premaster secret）。</li>
+<li>Client和Server根据约定的加密方法，使用前面的三个随机数，生成”对话密钥”（session key），用来加密接下来的整个对话过程。</li>
+</ol>
+<h2 id="SSH登陆"><a href="#SSH登陆" class="headerlink" title="SSH登陆"></a>SSH登陆</h2><p>用户将自己的公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="external">RSA算法原理（一）</a>  <a href="http://www.ruanyifeng.com/blog/2013/07/rsa_algorithm_part_two.html" target="_blank" rel="external">（二）</a><br><a href="https://www.zhihu.com/question/25912483" target="_blank" rel="external">RSA的公钥和私钥哪个用来加密哪个用来解密</a><br><a href="https://segmentfault.com/a/1190000012278289" target="_blank" rel="external">RSA中的数学</a><br><a href="http://blog.csdn.net/a_flying_bird/article/details/77619348" target="_blank" rel="external">RSA证明</a><br><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="external">数字签名是什么</a><br><a href="https://cnodejs.org/topic/504061d7fef591855112bab5" target="_blank" rel="external">浅谈nodejs中的Crypto模块</a><br><a href="http://www.cnblogs.com/chyingp/p/nodejs-learning-crypto-md5.html" target="_blank" rel="external">MD5入门介绍及crypto模块的应用</a><br><a href="http://www.infoq.com/cn/articles/how-to-encrypt-the-user-password-correctly" target="_blank" rel="external">如何正确对用户密码进行加密</a><br><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="external">图解SSL/TSL协议</a><br><a href="https://segmentfault.com/a/1190000002554673" target="_blank" rel="external">SSL/TLS原理详解</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hash/" rel="tag"># hash</a>
+          
+            <a href="/tags/加密/" rel="tag"># 加密</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Ying</p>
+              <p class="site-description motion-element" itemprop="description">self note</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对称加密"><span class="nav-number">1.</span> <span class="nav-text">对称加密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分组加密"><span class="nav-number">1.1.</span> <span class="nav-text">分组加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DES-Data-Encryption-Standard"><span class="nav-number">1.2.</span> <span class="nav-text">DES(Data Encryption Standard)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3DES"><span class="nav-number">1.3.</span> <span class="nav-text">3DES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AES-Advanced-Encryption-Standard"><span class="nav-number">1.4.</span> <span class="nav-text">AES(Advanced Encryption Standard)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非对称加密"><span class="nav-number">2.</span> <span class="nav-text">非对称加密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA"><span class="nav-number">2.1.</span> <span class="nav-text">RSA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公钥和私钥的产生"><span class="nav-number">2.1.1.</span> <span class="nav-text">公钥和私钥的产生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全性"><span class="nav-number">2.1.2.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加密消息"><span class="nav-number">2.1.3.</span> <span class="nav-text">加密消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解密消息"><span class="nav-number">2.1.4.</span> <span class="nav-text">解密消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DSA（Digital-Signature-Algorithm）"><span class="nav-number">2.2.</span> <span class="nav-text">DSA（Digital Signature Algorithm）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ECC（Elliptic-curve-cryptography）"><span class="nav-number">2.3.</span> <span class="nav-text">ECC（Elliptic curve cryptography）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#散列函数"><span class="nav-number">3.</span> <span class="nav-text">散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安全散列函数"><span class="nav-number">3.1.</span> <span class="nav-text">安全散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MD5"><span class="nav-number">3.1.1.</span> <span class="nav-text">MD5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SHA（Secure-Hash-Algorithm）"><span class="nav-number">3.1.2.</span> <span class="nav-text">SHA（Secure Hash Algorithm）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MAC-Message-authentication-code"><span class="nav-number">3.1.3.</span> <span class="nav-text">MAC(Message authentication code)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用"><span class="nav-number">3.1.4.</span> <span class="nav-text">应用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用-1"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数字签名"><span class="nav-number">4.1.</span> <span class="nav-text">数字签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数字证书"><span class="nav-number">4.2.</span> <span class="nav-text">数字证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-number">4.3.</span> <span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH登陆"><span class="nav-number">4.4.</span> <span class="nav-text">SSH登陆</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ying</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.1"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
