@@ -100,20 +100,20 @@
   <meta name="keywords" content="node," />
 
 
-<meta name="description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用node –inspect app.js命令运行你的app 在Remote Target中找到你的app，点击in">
+<meta name="description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用如下命令运行你的app 1node --inspect app.js  在Remote Target中找到你的ap">
 <meta name="keywords" content="node">
 <meta property="og:type" content="article">
 <meta property="og:title" content="现在就开始debug node">
 <meta property="og:url" content="http://yoursite.com/2018/01/20/node-debug/index.html">
 <meta property="og:site_name" content="Boring">
-<meta property="og:description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用node –inspect app.js命令运行你的app 在Remote Target中找到你的app，点击in">
+<meta property="og:description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用如下命令运行你的app 1node --inspect app.js  在Remote Target中找到你的ap">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/01/20/node-debug/chrome1.jpeg">
 <meta property="og:image" content="http://yoursite.com/2018/01/20/node-debug/chrome2.jpeg">
-<meta property="og:updated_time" content="2018-01-20T13:34:53.000Z">
+<meta property="og:updated_time" content="2018-01-20T13:40:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="现在就开始debug node">
-<meta name="twitter:description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用node –inspect app.js命令运行你的app 在Remote Target中找到你的app，点击in">
+<meta name="twitter:description" content="无需下载额外编辑器，无需安装node-inspector，使用Chrome就可以开始你的node应用调试。 你需要准备：  Node.js 6.3+ Chrome 55+  步骤：  在Chrome中打开chrome://inspect 点击configure,增加你的app端口 使用如下命令运行你的app 1node --inspect app.js  在Remote Target中找到你的ap">
 <meta name="twitter:image" content="http://yoursite.com/2018/01/20/node-debug/chrome1.jpeg">
 
 
@@ -366,12 +366,15 @@
 <ol>
 <li>在Chrome中打开chrome://inspect</li>
 <li>点击configure,增加你的app端口</li>
-<li>使用node –inspect app.js命令运行你的app</li>
-<li>在Remote Target中找到你的app，点击inspect</li>
+<li><p>使用如下命令运行你的app</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node --inspect app.js</div></pre></td></tr></table></figure>
+</li>
+<li><p>在Remote Target中找到你的app，点击inspect</p>
+</li>
 </ol>
 <p><img src="chrome1.jpeg" alt=""><br>然后就可以在弹出的窗口中进行如网页般熟悉的调试了😉<br><img src="chrome2.jpeg" alt=""> </p>
 <p>真是意外的简单</p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://nodejs.org/en/docs/inspector/" target="_blank" rel="external">官方文档</a></p>
+<p><strong>参考链接</strong><br><a href="https://nodejs.org/en/docs/inspector/" target="_blank" rel="external">官方文档</a></p>
 
       
     </div>
@@ -459,17 +462,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -530,22 +524,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">1.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -581,6 +559,7 @@
 
 
   
+
 
 
 
